@@ -1,6 +1,6 @@
 {
   "name": "nodechan",
-  "version": "0.0.8",
+  "version": "0.1.2",
   "description": "Imageboard em nodejs",
   "main": "main.js",
   "scripts": {
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ussaohelcim/nodechan/issues"
   },
-  "homepage": "https://github.com/ussaohelcim/nodechan#readme"
+  "homepage": "https://github.com/ussaohelcim/nodechan#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
