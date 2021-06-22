@@ -1,0 +1,58 @@
+{
+    "fios": [
+        {
+            "OP": {
+                "numero": 1,
+                "titulo": "Tostando",
+                "imagem": "",
+                "mensagem": "Sejam bem vindo a essa merda de imageboard! vao se foderem fwafnwaufawf uwafuwoabfu owab ufbwa uo fhwoa ,fhwa uofhwuao ,fhwao ,fhwuofowhuoaf"
+            },
+            "respostas": [
+                {
+                    "titulo": "xota",
+                    "imagem": "",
+                    "mensagem": "Obrigado por fazer essa merda!"
+                },
+                {
+                    "titulo": "",
+                    "imagem": "",
+                    "mensagem": "aa<scriapt>alert('Vulneravel a XSS')</script>"
+                },
+                {
+                    "titulo": "",
+                    "imagem": "",
+                    "mensagem": "Arruma essa merda ai, ademir. Ninguem merece em pleno 2021 ainda sofrer com XSS"
+                },
+                {
+                    "titulo": "OP AQUI",
+                    "imagem": "",
+                    "mensagem": "Faz melhor então"
+                }
+            ]
+        },
+        {
+            "OP": {
+                "numero": 2,
+                "titulo": "Salve",
+                "imagem": "",
+                "mensagem": "novo fio camaradas"
+            },
+            "respostas": [
+                {
+                    "titulo": "",
+                    "imagem": "",
+                    "mensagem": "e o fodase?"
+                }
+            ]
+        },
+        {
+            "OP": {
+                "numero": 3,
+                "titulo": "Salve",
+                "imagem": "",
+                "mensagem": "Estou apenas tostando o pretiffy"
+            },
+            "respostas": []
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "nodechan",
+  "version": "0.0.8",
+  "description": "Imageboard em nodejs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ussaohelcim/nodechan.git"
+  },
+  "author": "ussaohelcim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ussaohelcim/nodechan/issues"
+  },
+  "homepage": "https://github.com/ussaohelcim/nodechan#readme"
+}

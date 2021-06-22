@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nodechan</title>
+    <style>
+        html,body
+        {
+            padding: 0;
+            margin: 0;
+            background-color: burlywood;
+            
+        }
+        header
+        {
+            background-color: rgb(229, 209, 182);
+            text-align: center;
+        }
+        .catalogo
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+        .fio
+        {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: tan;
+            margin: 5pt;
+            padding: 5pt;
+        }
+        .fio:hover
+        {
+            cursor: pointer;
+            background-color: rgb(172, 146, 112);
+        }
+        .imagem
+        {
+            background-color: skyblue;
+            width: 250px;
+            height: 250px;
+        }
+        .novo
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(151, 128, 98);
+            padding: 10pt;
+        }
+        .novo .conteudo
+        {
+            display: flex;
+            flex-direction: column;
+        }
+        .novo input
+        {
+            background-color: rgb(219, 203, 182);
+            margin-bottom: 5pt;
+            margin-left: 5pt;
+        }
+        .novo textarea
+        {
+            background-color: rgb(219, 203, 182);
+            margin-bottom: 5pt;
+            margin-left: 5pt;
+        }
+        .novo button
+        {
+            margin-left: 5pt;
+        }
+        h2
+        {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Nodechan, por ussaohelcim.
+    </header>
+    <div class="novo">
+        <div class="imagem"></div>
+        <div class="conteudo">
+            <h2>Novo fio</h2>
+            <input placeholder="Assunto" type="text">
+            <textarea placeholder="Texto do seu fio" name="" id="" cols="30" rows="10"></textarea>
+            <button type="submit">Criar fio</button>
+        </div> 
+    </div>
+    
+    <main class="catalogo">
+        <!-- <div class="fio" onclick="alert('teste')">
+            <div class="imagem"></div>
+            <div class="conteudo">
+                <p>Anonimo</p>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Delectus nam quo sequi, aspernatur nostrum vitae id amet illum quas quos tempore, facere quasi porro quia omnis minus cupiditate consectetur accusantium.</p>
+            </div> 
+        </div> -->
