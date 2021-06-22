@@ -6,8 +6,8 @@ Imageboard simples utilizando nodejs como backend.
 - [X] Receber OPs na pagina inicial
 - [X] Clicar em uma para ir até essa postagem
 - [X] Receber respostas ao entrar em uma postagem
-- [ ] Escrever assunto
-- [ ] Escrever mensagem
+- [X] Escrever assunto
+- [X] Escrever mensagem
 - [ ] Enviar imagem
 - [ ] Criar nova postagem
     - [ ] Via cliente
