@@ -16,7 +16,6 @@ let teste = `
 `
 let fioResposta = `
 <div class="novo">
-    <div class="imagem"></div>
     <div class="conteudo">
         <h2>Responder</h2>
         <input placeholder="Assunto" type="text">
@@ -85,16 +84,17 @@ servidor.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
     console.log(db.fios[0].OP)
     //novoFio("Salve","","Estou apenas tostando o pretiffy")
+    //novaResposta(3,"","MITO")
 });
 
 function getFio(numero)
 {
     let fiojson = db.fios[numero-1]
-    let op = `<div class="fio"><div class="op"><div class="imagem"></div><div class="conteudo"><p>${fiojson.OP.titulo}</p><p>${fiojson.OP.mensagem}</p></div></div>`
+    let op = `<div class="fio"><div class="op"><div class="conteudo"><p class="titulo">${fiojson.OP.titulo}</p><p>${fiojson.OP.mensagem}</p></div></div>`
     let respostas = ""
     for (let index = 0; index < fiojson.respostas.length; index++) {
-        respostas+=`<div class="resposta"><div class="imagem"></div><div class="conteudo">
-            <p>${fiojson.respostas[index].titulo == ""? "Anonimo" : fiojson.respostas[index].titulo}</p>
+        respostas+=`<div class="resposta"><div class="conteudo">
+            <p class="titulo">${fiojson.respostas[index].titulo == ""? "Anonimo" : fiojson.respostas[index].titulo}</p>
             <p>${fiojson.respostas[index].mensagem}</p>
         </div>
     </div>`
@@ -109,23 +109,25 @@ function getOPs()
     for (let i = 0; i < fiosJson.length; i++) 
     {
         ops += `<div class="fio" onclick="window.location='${"/fio/"+fiosJson[i].OP.numero}'">
-            <div class="imagem"></div>
-            <div class="conteudo"><p>${fiosJson[i].OP.titulo}</p><p>${fiosJson[i].OP.mensagem}</p></div>
+                <div class="conteudo">
+                    <p class="titulo">${fiosJson[i].OP.titulo}</p><p>${fiosJson[i].OP.mensagem}</p>
+                </div>
+                <p class="quantidade">${fiosJson[i].respostas.length} respostas.</p>
             </div>`
     }
     return ops;
 }
-function novoFio(titulo,imagem,comentario)
+function novoFio(titulo,comentario)
 {
-    db.fios.push({OP:{numero:db.fios.length+1,titulo:titulo,imagem:"",mensagem:comentario},respostas:[]})
+    db.fios.push({OP:{numero:db.fios.length+1,titulo:titulo,mensagem:comentario},respostas:[]})
     fs.writeFile("threads.json",JSON.stringify(db),err =>{
         if(err) throw err
         console.log("Novo fio adicionado")
     })
 }
-function novaResposta(fio,title,imagem,comment)
+function novaResposta(fio,title,comment)
 {
-    db.fios[fio-1].respostas.push({titulo:title,imagem:"",comentario:comment})
+    db.fios[fio-1].respostas.push({titulo:title,mensagem:comment})
     fs.writeFile("threads.json",JSON.stringify(db),err =>{
         if(err) throw err
         console.log("Nova resposta adicionada")
