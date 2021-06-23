@@ -105,8 +105,8 @@ const servidor = http.createServer((request,response)=>{
                 response.writeHead(404, {'Content-Type': 'text/html'});
                 return response.end("404 Not Found");
             }
-
-            response.write(site)
+            response.write("<h1>Pagina nao encontrada</h1>")
+            
             return response.end();
         })
     }
