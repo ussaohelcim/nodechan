@@ -6,7 +6,7 @@ const fs = require('fs')
 const db = require("./threads.json")
 const { parse } = require('querystring')
 
-const limiteTopicos = 30
+const limiteTopicos = 10
 
 let fioResposta = `
 <div class="novo">
@@ -107,9 +107,7 @@ const servidor = http.createServer((request,response)=>{
 })
 servidor.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
-    //console.log(db.fios[0].OP)
-    //novoFio("Salve","","Estou apenas tostando o pretiffy")
-    //novaResposta(3,"","MITO")
+
 });
 
 /**
@@ -119,12 +117,6 @@ servidor.listen(port, hostname, () => {
  */
 function getFio(numero)
 {
-    
-    // let fiojson = db.fios[numero-1]
-
-    // let fiojson = db.fios.find(elem =>{
-    //     elem.OP.numero == numero
-    // })
     let fiojson = ""
     for (let index = 0; index < db.fios.length; index++) {
         if(db.fios[index].OP.numero == numero)
@@ -136,7 +128,8 @@ function getFio(numero)
     let op = `<div class="fio"><div class="op"><div class="conteudo"><p class="titulo">${fiojson.OP.titulo}</p><p>${ fiojson.OP.mensagem.includes(`\r\n`) ? fiojson.OP.mensagem.replace(/\r\n/g,"<br>") : fiojson.OP.mensagem}</p></div></div>`
     let respostas = ""
     for (let index = 0; index < fiojson.respostas.length; index++) {
-        respostas+=`<div class="resposta"><div class="conteudo">
+        respostas+=`
+        <div class="resposta"><div class="conteudo">
             <p class="titulo">${fiojson.respostas[index].titulo == ""? "Anonimo" : fiojson.respostas[index].titulo}</p>
             <p>${fiojson.respostas[index].mensagem}</p>
         </div>
@@ -175,8 +168,15 @@ function novoFio(titulo,comentario)
     if(db.fios.length >= limiteTopicos)
     {
         db.fios.pop()
+        for (let index = 0; index < db.fios.length; index++) {
+            db.fios[index].OP.numero--
+        }
     }
-    db.fios.unshift({OP:{numero:db.fios.length+1,titulo:titulo,mensagem:comentario},respostas:[]})
+    db.fios.unshift({OP:{
+        numero: db.fios.length+1,
+        titulo: titulo == ""? "Anonimo" : titulo,
+        mensagem:comentario
+    },respostas:[]})
     fs.writeFile("threads.json",JSON.stringify(db),err =>{
         if(err) throw err
         console.log("Novo fio adicionado")
