@@ -10,9 +10,11 @@ let fioResposta = `
 <div class="novo">
     <div class="conteudo">
         <h2>Responder</h2>
-        <input placeholder="Assunto" type="text">
-        <textarea placeholder="Texto da sua resposta" name="" id="" cols="30" rows="10"></textarea>
-        <button type="submit">Enviar</button>
+        <form action="/responder/" method="post">
+            <input name="assunto" placeholder="Assunto" type="text">
+            <textarea placeholder="Texto do seu fio" name="mensagem" cols="30" rows="10"></textarea>
+        <button type="submit">Enviar resposta</button>
+    </form>
     </div> 
 </div>` 
 const restoSite = `</div></main></body></html>`
@@ -21,24 +23,43 @@ const servidor = http.createServer((request,response)=>{
     response.statusCode = 200;
     response.setHeader('Content-Type', 'text/html');
     let url = request.url;
+
     
     //console.log(request.param)
     if(request.method == "POST")
     {
         console.log("tentou post")
         let bode = ""
-        //let corpo = ""
+
         request.on('data', (dado)=>{
             bode += dado.toString()
-            //corpo+= dado
-            //console.log(dado.body.assunto)
             
         })
-        request.on('end', ()=>{
+        request.on('end', ()=>
+        {
             resultado = parse(bode)
             
-            //let fio = tratarPOST(corpo)
-            novoFio(resultado.assunto,resultado.mensagem)
+            if(url === '/')
+            {
+                novoFio(resultado.assunto,resultado.mensagem)
+                response.writeHead(302,{
+                    location: `http://${hostname}/fio/${db.fios.length}` 
+                });
+            }
+            else if(url === "/responder/")
+            {
+                let numFio = request.headers.referer
+                let referer = request.headers.referer
+
+                numFio = Number(numFio.replace(`http://${hostname}/fio/`,"")) 
+
+                novaResposta(numFio,resultado.assunto,resultado.mensagem)
+                //console.log("tentando responder o fio: "+numFio)
+
+                response.writeHead(302,{
+                    location: referer
+                });
+            }
             
             response.end();
         })
@@ -93,25 +114,6 @@ servidor.listen(port, hostname, () => {
     //novoFio("Salve","","Estou apenas tostando o pretiffy")
     //novaResposta(3,"","MITO")
 });
-// app.get('/',(req,res)=>{
-//     fs.readFile("index.html", function(err, site)
-//     {
-//         if(err)
-//         {
-//             res.writeHead(404, {'Content-Type': 'text/html'});
-//             return res.end("404 Not Found");
-//         }   
-        
-//         res.write(site+getOPs()+restoSite)
-//         return res.end();
-//     })
-// });
-// app.post('/',function(request,response){
-//     console.log(request.body)
-// })
-// app.listen(port,function(req,res){
-//     console.log("rodando")
-// })
 
 /**
  * Função que retorna, em HTML, um fio completo com as respostas.
