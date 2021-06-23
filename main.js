@@ -99,16 +99,10 @@ const servidor = http.createServer((request,response)=>{
     {
         //404
         response.statusCode = 404;
-        fs.readFile("404.html", function(err, site){
-            if(err)
-            {
-                response.writeHead(404, {'Content-Type': 'text/html'});
-                return response.end("404 Not Found");
-            }
-            response.write("<h1>Pagina nao encontrada</h1>")
+
+        response.write("<h1>Pagina nao encontrada</h1>")
             
-            return response.end();
-        })
+        return response.end();
     }
 })
 servidor.listen(port, hostname, () => {
