@@ -16,7 +16,5 @@
     "url": "https://github.com/ussaohelcim/nodechan/issues"
   },
   "homepage": "https://github.com/ussaohelcim/nodechan#readme",
-  "dependencies": {
-    "express": "^4.17.1"
-  }
+  "dependencies": {}
 }

@@ -4,16 +4,8 @@ const hostname = "192.168.0.105"
 const port = 80
 const fs = require('fs')
 const db = require("./threads.json")
+const { parse } = require('querystring')
 
-let teste = `
-<div class="op">
-    <div class="imagem"></div>
-    <div class="conteudo">
-        <p>Anonimo</p>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Delectus nam quo sequi, aspernatur nostrum vitae id amet illum quas quos tempore, facere quasi porro quia omnis minus cupiditate consectetur accusantium.</p>
-    </div> 
-</div>
-`
 let fioResposta = `
 <div class="novo">
     <div class="conteudo">
@@ -31,12 +23,27 @@ const servidor = http.createServer((request,response)=>{
     let url = request.url;
     
     //console.log(request.param)
-    
-    if(request.method == 'POST')
+    if(request.method == "POST")
     {
-        console.log("tentou um post")
+        console.log("tentou post")
+        let bode = ""
+        //let corpo = ""
+        request.on('data', (dado)=>{
+            bode += dado.toString()
+            //corpo+= dado
+            //console.log(dado.body.assunto)
+            
+        })
+        request.on('end', ()=>{
+            resultado = parse(bode)
+            
+            //let fio = tratarPOST(corpo)
+            novoFio(resultado.assunto,resultado.mensagem)
+            
+            response.end();
+        })
     }
-    if(url === '/')
+    else if(url === '/')
     {
         //home
         fs.readFile("catalogo.html", function(err, site){
@@ -82,15 +89,39 @@ const servidor = http.createServer((request,response)=>{
 })
 servidor.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
-    console.log(db.fios[0].OP)
+    //console.log(db.fios[0].OP)
     //novoFio("Salve","","Estou apenas tostando o pretiffy")
     //novaResposta(3,"","MITO")
 });
+// app.get('/',(req,res)=>{
+//     fs.readFile("index.html", function(err, site)
+//     {
+//         if(err)
+//         {
+//             res.writeHead(404, {'Content-Type': 'text/html'});
+//             return res.end("404 Not Found");
+//         }   
+        
+//         res.write(site+getOPs()+restoSite)
+//         return res.end();
+//     })
+// });
+// app.post('/',function(request,response){
+//     console.log(request.body)
+// })
+// app.listen(port,function(req,res){
+//     console.log("rodando")
+// })
 
+/**
+ * Função que retorna, em HTML, um fio completo com as respostas.
+ * @param {Number} numero Numero do fio
+ * @returns {HTMLElement} Divs dos OPs e respostas
+ */
 function getFio(numero)
 {
     let fiojson = db.fios[numero-1]
-    let op = `<div class="fio"><div class="op"><div class="conteudo"><p class="titulo">${fiojson.OP.titulo}</p><p>${fiojson.OP.mensagem}</p></div></div>`
+    let op = `<div class="fio"><div class="op"><div class="conteudo"><p class="titulo">${fiojson.OP.titulo}</p><p>${ fiojson.OP.mensagem.includes(`\r\n`) ? fiojson.OP.mensagem.replace(/\r\n/g,"<br>") : fiojson.OP.mensagem}</p></div></div>`
     let respostas = ""
     for (let index = 0; index < fiojson.respostas.length; index++) {
         respostas+=`<div class="resposta"><div class="conteudo">
@@ -102,6 +133,10 @@ function getFio(numero)
 
     return op+respostas
 }
+/**
+ * Função que retorna, em HTML, todos os OPs e apenas os OPs.
+ * @returns {HTMLElement} Divs dos OPs
+ */
 function getOPs()
 {
     let fiosJson = db.fios
@@ -117,19 +152,62 @@ function getOPs()
     }
     return ops;
 }
+/**
+ * Criar um novo fio.
+ * @param {String} titulo Assunto do fio; Caso "" o assunto é "Anonimo"
+ * @param {String} comentario Mensagem que vai ser adicionada no fio.
+ */
 function novoFio(titulo,comentario)
 {
+     
     db.fios.push({OP:{numero:db.fios.length+1,titulo:titulo,mensagem:comentario},respostas:[]})
     fs.writeFile("threads.json",JSON.stringify(db),err =>{
         if(err) throw err
         console.log("Novo fio adicionado")
     })
 }
+/**
+ * Criar uma nova resposta.
+ * @param {Number} fio Numero do fio.
+ * @param {String} title Assunto do fio; Caso "" o assunto é "Anonimo"
+ * @param {String} comment Mensagem que vai ser adicionada na resposta
+ */
 function novaResposta(fio,title,comment)
 {
-    db.fios[fio-1].respostas.push({titulo:title,mensagem:comment})
+    db.fios[fio-1].respostas.push({titulo: title=="" ? "Anonimo" : title,mensagem:comment})
     fs.writeFile("threads.json",JSON.stringify(db),err =>{
         if(err) throw err
         console.log("Nova resposta adicionada")
     })
+}
+
+function tratarPOST(corpo)
+{
+    let assunto = String(corpo.substring(0,corpo.indexOf('&'))) ;
+    assunto = assunto.replace("assunto=","");
+    assunto = assunto.replace(/\+/g," ");
+
+    let mensagem = String(corpo.substring(corpo.indexOf('&'),corpo.length)) ;
+    mensagem = mensagem.replace("&mensagem=","");
+    //mensagem = trocarTodos(mensagem,"+"," ")
+    //mensagem = trocarTodos(mensagem,"%0\\D%0","\n")
+
+    console.log("assunto: '"+assunto+"' mensagem: '"+mensagem+"'");
+    return {a:assunto,m:mensagem};
+}
+/**
+ * 
+ * @param {String} letras 
+ * @param {String} letrasPraTirar 
+ * @param {String} letrasPraColocar 
+ * @returns {String} Nova string com tudo que era pra tirar tirado
+ */
+function trocarTodos(letras,letrasPraTirar,letrasPraColocar)
+{
+    let s = ""
+    while(letras.includes(letrasPraTirar))
+    {
+        s =+ letras.replace(letrasPraTirar,letrasPraColocar)
+    }
+    return s
 }
