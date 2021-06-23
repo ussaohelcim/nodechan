@@ -1,10 +1,12 @@
 const http = require('http')
-
+let tempoestampa = Date.now()
 const hostname = "192.168.0.105"
 const port = 80
 const fs = require('fs')
 const db = require("./threads.json")
 const { parse } = require('querystring')
+
+const limiteTopicos = 30
 
 let fioResposta = `
 <div class="novo">
@@ -67,6 +69,7 @@ const servidor = http.createServer((request,response)=>{
     else if(url === '/')
     {
         //home
+        //console.log(tempoestampa)
         fs.readFile("catalogo.html", function(err, site){
             if(err)
             {
@@ -122,7 +125,20 @@ servidor.listen(port, hostname, () => {
  */
 function getFio(numero)
 {
-    let fiojson = db.fios[numero-1]
+    
+    // let fiojson = db.fios[numero-1]
+
+    // let fiojson = db.fios.find(elem =>{
+    //     elem.OP.numero == numero
+    // })
+    let fiojson = ""
+    for (let index = 0; index < db.fios.length; index++) {
+        if(db.fios[index].OP.numero == numero)
+        {
+            fiojson = db.fios[index]
+        }
+        
+    }
     let op = `<div class="fio"><div class="op"><div class="conteudo"><p class="titulo">${fiojson.OP.titulo}</p><p>${ fiojson.OP.mensagem.includes(`\r\n`) ? fiojson.OP.mensagem.replace(/\r\n/g,"<br>") : fiojson.OP.mensagem}</p></div></div>`
     let respostas = ""
     for (let index = 0; index < fiojson.respostas.length; index++) {
@@ -147,7 +163,8 @@ function getOPs()
     {
         ops += `<div class="fio" onclick="window.location='${"/fio/"+fiosJson[i].OP.numero}'">
                 <div class="conteudo">
-                    <p class="titulo">${fiosJson[i].OP.titulo}</p><p>${fiosJson[i].OP.mensagem}</p>
+                    <p class="titulo">${fiosJson[i].OP.titulo}</p>
+                    <p>${fiosJson[i].OP.mensagem}</p>
                 </div>
                 <p class="quantidade">${fiosJson[i].respostas.length} respostas.</p>
             </div>`
@@ -161,8 +178,11 @@ function getOPs()
  */
 function novoFio(titulo,comentario)
 {
-     
-    db.fios.push({OP:{numero:db.fios.length+1,titulo:titulo,mensagem:comentario},respostas:[]})
+    if(db.fios.length >= limiteTopicos)
+    {
+        db.fios.pop()
+    }
+    db.fios.unshift({OP:{numero:db.fios.length+1,titulo:titulo,mensagem:comentario},respostas:[]})
     fs.writeFile("threads.json",JSON.stringify(db),err =>{
         if(err) throw err
         console.log("Novo fio adicionado")
@@ -176,7 +196,13 @@ function novoFio(titulo,comentario)
  */
 function novaResposta(fio,title,comment)
 {
-    db.fios[fio-1].respostas.push({titulo: title=="" ? "Anonimo" : title,mensagem:comment})
+    for (let index = 0; index < db.fios.length; index++) {
+        if(db.fios[index].OP.numero == fio)
+        {
+            db.fios[index].respostas.push({titulo: title=="" ? "Anonimo" : title,mensagem:comment})
+        }
+    }
+    
     fs.writeFile("threads.json",JSON.stringify(db),err =>{
         if(err) throw err
         console.log("Nova resposta adicionada")
