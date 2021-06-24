@@ -149,11 +149,12 @@ function getOPs()
     for (let i = 0; i < fiosJson.length; i++) 
     {
         ops += `<div class="fio" onclick="window.location='${"/fio/"+fiosJson[i].OP.numero}'">
+            
                 <div class="conteudo">
                     <p class="titulo">${fiosJson[i].OP.titulo}</p>
                     <p>${fiosJson[i].OP.mensagem}</p>
                 </div>
-                <p class="quantidade">${fiosJson[i].respostas.length} respostas.</p>
+                <p class="quantidade">${fiosJson[i].respostas.length} respostas.  <a href="${fiosJson[i].OP.link}">ABRIR</a></p>
             </div>`
     }
     return ops;
@@ -174,8 +175,10 @@ function novoFio(titulo,comentario)
     }
     db.fios.unshift({OP:{
         numero: db.fios.length+1,
-        titulo: titulo == ""? "Anonimo" : titulo,
-        mensagem:comentario
+        titulo: titulo == ""? "Anonimo" : (titulo.includes("<script>") ? titulo.replace(/<script>/g,"") : titulo),
+        mensagem: comentario.includes("<script>") ? comentario.replace(/<script>/g,"") : comentario,
+        link:`/fio/${db.fios.length+1}`
+        // mensagem: removerXSS(comentario)// comentario.includes("<script>") ? comentario.replace(/<script>/g,"") : comentario
     },respostas:[]})
     fs.writeFile("threads.json",JSON.stringify(db),err =>{
         if(err) throw err
@@ -232,4 +235,16 @@ function trocarTodos(letras,letrasPraTirar,letrasPraColocar)
         s =+ letras.replace(letrasPraTirar,letrasPraColocar)
     }
     return s
+}
+/**
+ * Tentativa de fazer um sanitizante
+ * @param {String} texto 
+ * @returns {String} Texto com <script> removido
+ */
+function removerXSS(texto)
+{
+    let textoLimpo = texto.includes("<script>") ? texto.replace(/<script>/g,"") : textoLimpo
+    textoLimpo = texto.includes("</script>") ? texto.replace(/<\/script>/g,"") : textoLimpo
+    
+    return textoLimpo
 }
