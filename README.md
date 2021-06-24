@@ -1,5 +1,5 @@
 # nodechan
-Imageboard simples utilizando nodejs como backend.
+Fórum, anônimo, simples utilizando nodejs como backend.
 
 # Estado do desenvolvimento
 
@@ -8,12 +8,12 @@ Imageboard simples utilizando nodejs como backend.
 - [X] Receber respostas ao entrar em uma postagem
 - [X] Escrever assunto
 - [X] Escrever mensagem
-- [ ] Enviar imagem
-- [ ] Criar nova postagem
-    - [ ] Via cliente
+- [ ] ~~Enviar imagem~~
+- [X] Criar nova postagem
+    - [X] Via cliente
     - [X] Via servidor
-- [ ] Criar nova resposta
-    - [ ] Via cliente
+- [X] Criar nova resposta
+    - [X] Via cliente
     - [X] Via servidor
 
 
