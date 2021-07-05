@@ -1,7 +1,9 @@
 const http = require('http')
 let tempoestampa = Date.now()
-const hostname = "192.168.0.105"
-const port = 80
+
+const config = require('./config.json')
+const hostname = config.IP 
+const port = config.PORT 
 const fs = require('fs')
 const db = require("./threads.json")
 const { parse } = require('querystring')
@@ -19,7 +21,7 @@ let fioResposta = `
     </form>
     </div> 
 </div>` 
-const restoSite = `</div></main></body></html>`
+const restoSite = `</div></main><footer>Este site é vulneravel a ataques XSS, desabilite o javascript.</footer></body></html>`
 
 const servidor = http.createServer((request,response)=>{
     response.statusCode = 200;

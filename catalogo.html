@@ -12,10 +12,16 @@
             background-color: burlywood;
             
         }
-        header
+        header,footer
         {
             background-color: rgb(229, 209, 182);
             text-align: center;
+        }
+        footer
+        {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
         }
         .catalogo
         {
@@ -28,6 +34,8 @@
         .fio
         {
             width: 300px;
+            max-height: 300px;
+            overflow: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -35,11 +43,6 @@
             margin: 5pt;
             padding: 5pt;
             box-shadow: 0 0 7px rgb(66, 49, 39);
-        }
-        .fio:hover
-        {
-            cursor: pointer;
-            background-color: rgb(172, 146, 112);
         }
         .imagem
         {
@@ -54,6 +57,13 @@
             align-items: center;
             background-color: rgb(151, 128, 98);
             padding: 10pt;
+        }
+        form
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
         .novo .conteudo
         {
@@ -90,12 +100,22 @@
             background-color: rgb(151, 126, 88);
             min-width: 300px;
         }
+        .fio p
+        {
+            word-wrap: break-word;
+            word-break: break-all;
+        }
         .quantidade
         {
             margin: 0;
             padding: 0;
             color: rgb(59, 59, 59);
         }
+        a
+        {
+            color: brown;
+        }
+
     </style>
 </head>
 <body>
@@ -106,9 +126,11 @@
         <!-- <div class="imagem"></div> -->
         <div class="conteudo">
             <h2>Novo fio</h2>
-            <input placeholder="Assunto" type="text">
-            <textarea placeholder="Texto do seu fio" name="" id="" cols="30" rows="10"></textarea>
-            <button type="submit">Criar fio</button>
+            <form action="/" method="post">
+                <input name="assunto" placeholder="Assunto" type="text">
+                <textarea placeholder="Texto do seu fio" name="mensagem" cols="30" rows="10"></textarea>
+                <button type="submit">Criar fio</button>
+            </form>
         </div> 
     </div>
     
